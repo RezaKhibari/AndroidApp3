@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.Manifest
 import android.content.pm.PackageManager
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -78,6 +79,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 Manifest.permission.ACCESS_COARSE_LOCATION) !=
                     PackageManager.PERMISSION_GRANTED)) {
             requestLocationPermissions()
+        } else {
+            fusedLocationClient.lastLocation.addOnCompleteListener {
+                val location = it.result
+                if (location != null) {
+                    val  latLng = LatLng(location.latitude, location.longitude)
+                    mMap.addMarker(MarkerOptions().position(latLng).title("You are here!"))
+                    val update = CameraUpdateFactory.newLatLngZoom(latLng, 16.0f)
+                    mMap.moveCamera(update)
+                } else {
+                    Log.e(TAG, "No location found")
+                }
+            }
         }
 
     }
