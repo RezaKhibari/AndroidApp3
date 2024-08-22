@@ -48,9 +48,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap = googleMap
 
         // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        val museum = LatLng(43.667644, -79.394533)
+        mMap.addMarker(MarkerOptions().position(museum).title("Royal Museum"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(museum))
     }
 
     private fun setupLocationClient() {
@@ -93,5 +93,22 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_LOCATION) {
+            if (grantResults.size == 2 && grantResults[0] ==
+                PackageManager.PERMISSION_GRANTED && grantResults[1] ==
+                PackageManager.PERMISSION_GRANTED) {
+                getCurrentLocatio()
+            } else {
+                Log.e(TAG, "Location permission denied")
+            }
+        }
     }
 }
