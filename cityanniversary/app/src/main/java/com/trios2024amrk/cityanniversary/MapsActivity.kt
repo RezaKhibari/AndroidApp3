@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.Manifest
 import android.content.pm.PackageManager
 import android.util.Log
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.viewmodel.CreationExtras.Empty
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -48,13 +50,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
-    override fun onMapReady(googleMap: GoogleMap) {
+    override fun onMapReady(googleMap: GoogleMap)
+    {
         mMap = googleMap
 
-        // Add a marker in Sydney and move the camera
-        val museum = LatLng(43.667644, -79.394533)
-        mMap.addMarker(MarkerOptions().position(museum).title("Royal Museum"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(museum))
+       getCurrentLocation()
+       mMap.setOnPoiClickListener {
+            Toast.makeText(this, it.name, Toast.LENGTH_LONG).show()
+        }
+
     }
 
     private fun setupLocationClient() {
